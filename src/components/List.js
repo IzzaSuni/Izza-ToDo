@@ -3,19 +3,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import {
-  Avatar,
-  Box,
-  ButtonBase,
-  Divider,
-  InputBase,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
+import { Avatar, Box, ButtonBase, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import "../index.css";
-import { borderRadius } from "@mui/system";
 import Masonry from "react-masonry-css";
 import moment from "moment";
 import Input from "./Input";

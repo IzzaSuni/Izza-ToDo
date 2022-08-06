@@ -102,8 +102,7 @@ const MainPage = () => {
       time: `${moment().format()}`,
     };
     setList([...list, data]);
-    delete data.temp;
-    delete data.isedit;
+
     title.value = null;
     desc.value = null;
     document.getElementById("cat").innerHTML = "Select a category";
@@ -166,7 +165,7 @@ const MainPage = () => {
   const handleSelect = (e) => {
     setSelect(e.target.value);
   };
-
+  console.log(list);
   const mainForm = (id, style) => {
     return (
       <Box

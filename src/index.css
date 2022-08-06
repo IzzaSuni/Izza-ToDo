@@ -111,11 +111,7 @@ textarea:disabled {
   #ohayoBig {
     display: none;
   }
-  #popUp {
-    /* display: flex;
-    width: calc(90%);
-    margin: 0 33px; */
-  }
+
   #listForm {
     width: 100%;
   }
