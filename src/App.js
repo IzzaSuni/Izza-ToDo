@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Layout from "./components/Layout";
+import MainPage from "./components/MainPage";
+import List from "./components/List";
+import { Box } from "@mui/material";
+import { useState } from "react";
 
-function App() {
+function App({}) {
+  const [item, setItem] = useState([]);
+  const list = (theList) => {
+    return setItem(theList);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Layout>
+        <MainPage item={list} />
+      </Layout>
     </div>
   );
 }
