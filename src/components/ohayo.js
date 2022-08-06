@@ -1,7 +1,7 @@
 export default function Ohayo() {
   var myDate = new Date();
   var currentHour = myDate.getHours();
-
+// asdad/
   var msg;
 
   if (currentHour < 12) msg = "Selamat Pagi 😊";
