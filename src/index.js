@@ -5,24 +5,11 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "@mui/material";
 import Theme from "./utils/Theme";
-import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ThemeProvider theme={Theme}>
     <React.StrictMode>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/Izza/ToDo" element={<App />} />
-          <Route
-            path="*"
-            element={
-              <main style={{ padding: "1rem" }}>
-                <p>There's nothing here!</p>
-              </main>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <App />
     </React.StrictMode>
   </ThemeProvider>
 );
