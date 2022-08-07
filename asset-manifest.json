@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Izza-Todo/static/css/main.7868a1f9.css",
-    "main.js": "/Izza-Todo/static/js/main.b8dde4aa.js",
+    "main.css": "/Izza-Todo/static/css/main.28690f6e.css",
+    "main.js": "/Izza-Todo/static/js/main.26fa2fce.js",
     "static/js/787.a5cad257.chunk.js": "/Izza-Todo/static/js/787.a5cad257.chunk.js",
     "index.html": "/Izza-Todo/index.html",
-    "main.7868a1f9.css.map": "/Izza-Todo/static/css/main.7868a1f9.css.map",
-    "main.b8dde4aa.js.map": "/Izza-Todo/static/js/main.b8dde4aa.js.map",
+    "main.28690f6e.css.map": "/Izza-Todo/static/css/main.28690f6e.css.map",
+    "main.26fa2fce.js.map": "/Izza-Todo/static/js/main.26fa2fce.js.map",
     "787.a5cad257.chunk.js.map": "/Izza-Todo/static/js/787.a5cad257.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7868a1f9.css",
-    "static/js/main.b8dde4aa.js"
+    "static/css/main.28690f6e.css",
+    "static/js/main.26fa2fce.js"
   ]
 }
