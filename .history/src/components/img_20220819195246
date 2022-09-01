@@ -1,0 +1,3 @@
+const img = ({ width, height, src }) => {
+  return <img style={{ height: height, width: width }} src={src} />;
+};

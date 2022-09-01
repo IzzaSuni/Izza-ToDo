@@ -1,0 +1,11 @@
+import { Box } from "@mui/system";
+
+const Img = ({ width = "30px", height = "30px", src }) => {
+  return (
+    <Box>
+      <img src={src} style={{ height: height, width: width }} alt={src} />
+    </Box>
+  );
+};
+
+export default Img;

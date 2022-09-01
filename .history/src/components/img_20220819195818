@@ -1,0 +1,9 @@
+const Img = ({ width = "30px", height = "30px", src }) => {
+  return (
+    <Box>
+      <img src={src} style={{ height: height, width: width }} />
+    </Box>
+  );
+};
+
+export default Img;

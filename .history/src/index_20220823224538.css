@@ -1,0 +1,171 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+body {
+  margin: 0;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: antialiased;
+  box-sizing: border-box;
+  background-color: #2c3639;
+}
+button[type="button"] {
+  font-size: 10px;
+}
+svg {
+  font-size: 16px !important;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+#cok:focus-within {
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.555);
+  transition: all 0.2s;
+}
+#cok,
+#edit {
+  box-shadow: 0px;
+  transition: all 0.6s;
+}
+input {
+  color: white !important;
+  font-family: poppins;
+}
+textarea {
+  color: white !important;
+  font-family: poppins;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #e7f6f2 inset !important;
+  box-shadow: 0 0 0 30px #e7f6f2 inset !important;
+}
+input:disabled {
+  -webkit-text-fill-color: black !important;
+}
+textarea:disabled {
+  -webkit-text-fill-color: black !important;
+}
+#edit:focus-visible {
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.555);
+  transition: all 0.2s;
+}
+input#searchBar {
+  padding: 4px 8px;
+}
+
+.grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-rows: masonry;
+}
+
+.my-masonry-grid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  width: auto;
+}
+.my-masonry-grid_column {
+  /* padding-left: 5px; gutter size */
+  background-clip: padding-box;
+}
+
+/* Style your items */
+.my-masonry-grid_column > div {
+  /* change div to reference your elements you put in <Masonry> */
+  margin-bottom: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 2px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px transparent;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 10px;
+  background-color: #303030;
+}
+
+.shadow {
+  box-shadow: 0px 2px 5px white;
+}
+.MuiPopover-paper {
+  background: #2b2b2b !important;
+  box-shadow: 0px 2px 5px white !important;
+}
+#buttonUpload ~ div {
+  display: none;
+}
+#halo:hover::after {
+  color: black;
+  z-index: 10;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.233);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  font-family: "Font Awesome 5 Free";
+  content: "\f095";
+  vertical-align: middle;
+  font-weight: 900;
+}
+/* responsive=============================================================================== */
+#mainContainer {
+  display: block;
+  height: 100vh;
+}
+@media (max-width: 900px) {
+  #mainForm {
+    display: none;
+  }
+  #ohayoSmall {
+    text-align: center;
+    position: sticky;
+    width: 100vw;
+  }
+  #ohayoBig {
+    display: none;
+  }
+
+  #listForm {
+    width: 100%;
+  }
+  #buttonAddNotes {
+    position: sticky;
+    bottom: 0;
+    width: 100vw;
+    height: 52px !important;
+    text-align: center;
+    border-radius: 16px 16px 0 0;
+  }
+}
+@media (min-width: 900px) {
+  #buttonAddNotes {
+    display: none;
+  }
+  #mainContainer {
+    display: block;
+  }
+  #ohayoSmall {
+    display: none;
+  }
+}
+
+#loginButton:hover {
+  background: transparent !important;
+}

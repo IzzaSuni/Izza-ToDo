@@ -1,15 +1,19 @@
-export default function Ohayo() {
+export default function Ohayo(inbetween) {
   const myDate = new Date();
   const currentHour = myDate.getHours();
-  let msg;
 
+  let msg;
   if (currentHour >= 2 && currentHour <= 11)
-    msg = "Selamat Pagi🤩, yuk semangat ";
+    msg = `Selamat Pagi ${inbetween ? inbetween : ""} yuk semangat 🤩`;
   else if (currentHour >= 11 && currentHour <= 14)
-    msg = "Selamat Siang 😃 ngantuk nih 😪";
-  else if (currentHour >= 14 && currentHour <= 18) msg = "Selamat Sore 🙂";
-  else if (currentHour >= 18 && currentHour <= 22) msg = "Selamat Petang 👀";
-  else if ((currentHour >= 22 && currentHour <= 2) || currentHour == 0)
-    msg = "Udah larut Malam🥶! yuk tidur😴";
+    msg = `Selamat Siang  ${
+      inbetween ? inbetween : ""
+    } semangat walau ngantuk 😃 `;
+  else if (currentHour >= 14 && currentHour <= 18)
+    msg = `Selamat Sore  ${inbetween ? inbetween : ""} 🙂`;
+  else if (currentHour >= 18 && currentHour <= 22)
+    msg = `Selamat Petang  ${inbetween ? inbetween : ""} 👀 `;
+  else if (currentHour >= 22 || currentHour <= 2)
+    msg = `Udah larut Malam nih  ${inbetween ? inbetween : ""}! yuk tidur😴`;
   return msg;
 }

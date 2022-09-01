@@ -20,7 +20,6 @@ export const colors = {
   Disable,
 };
 export const theme = createTheme({
-
   breakpoints: {
     values: {
       mobile: 0,
@@ -32,6 +31,9 @@ export const theme = createTheme({
   typography: {
     fontFamily: "Poppins",
     fontSize: 12,
+    allVariants: {
+      color: "white ",
+    },
   },
   components: {
     MuiButton: {
@@ -43,7 +45,6 @@ export const theme = createTheme({
       },
     },
   },
-
 });
 
 export default theme;
