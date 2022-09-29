@@ -3,8 +3,6 @@ import Snackbar from "@mui/material/Snackbar";
 import { Alert, Slide } from "@mui/material";
 import "../index.css";
 export default function Snackbars({ message, type, opens, handleClose }) {
-  console.log(type);
-
   function TransitionLeft(props) {
     return <Slide {...props} direction="right" />;
   }
@@ -20,7 +18,7 @@ export default function Snackbars({ message, type, opens, handleClose }) {
       <Alert
         severity={type}
         sx={{
-          width: "30%",
+          width: "300px",
           background: "#2B2B2B",
           color: "white !important",
         }}

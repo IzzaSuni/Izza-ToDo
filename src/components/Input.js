@@ -144,6 +144,7 @@ export default function Input({
   icon,
   id,
   hdlChangeCapture,
+  minchar,
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -194,7 +195,7 @@ export default function Input({
             placeholder={label}
             className={classes.login}
             type={inputType}
-            inputProps={{ maxLength: maxchar }}
+            inputProps={{ maxLength: maxchar, minLength: minchar }}
             InputProps={icon}
             disabled={isdisabled}
             sx={{
@@ -286,6 +287,7 @@ export default function Input({
             className={classes.Button}
             sx={className}
             id={id}
+            disabled={isdisabled}
           >
             {children}
           </Button>

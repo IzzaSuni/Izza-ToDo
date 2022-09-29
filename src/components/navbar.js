@@ -19,17 +19,16 @@ import useQuery from "../utils/Query";
 
 const useStyles = makeStyles({
   box: {
-    width: "calc(100% - 24px)",
+    width: "calc(100%)",
     display: "inline-flex",
     marginTop: "12px",
-    marginLeft: "12px",
   },
   boxChild1: {
     display: "inline-flex",
     alignItems: "center",
   },
   boxChild2: {
-    width: "calc(18%  )",
+    width: "calc(18%)",
     display: "flex",
     justifyContent: "space-between",
   },
@@ -47,7 +46,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Navbar = ({ filter, search, open, logOut }) => {
+const Navbar = ({ filter, search, open, logOut, ort }) => {
   const classes = useStyles();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -55,14 +54,20 @@ const Navbar = ({ filter, search, open, logOut }) => {
   const param = useQuery().get("user");
   const loct = useLocation().pathname;
   const Private = useLocation().pathname === "/publicNote/Private";
-
+  const uname = localStorage.getItem("uname");
   //renderSearchbar
   const searchBar = () => {
     return (
       <InputBase
-        sx={{ border: "2px white solid", borderRadius: "16px", mr: 1 }}
+        sx={{
+          border: "1px white solid",
+          borderRadius: "16px",
+          py: 1,
+          mr: ort.small ? 0 : 1,
+          width: ort.small ? "90%" : "auto",
+        }}
         endAdornment={
-          <SearchOutlinedIcon sx={{ fill: "white", fontSize: "14px" }} />
+          <SearchOutlinedIcon sx={{ fill: "white", fontSize: "24px" }} />
         }
         onChange={(e) => search(e)}
         id="searchBar"
@@ -75,7 +80,7 @@ const Navbar = ({ filter, search, open, logOut }) => {
   const togle = () => {
     return (
       <Input type={"buttonCustom"} onClickBtn={open}>
-        Add Notes <AddIcon />
+        Add <AddIcon />
       </Input>
     );
   };
@@ -96,7 +101,7 @@ const Navbar = ({ filter, search, open, logOut }) => {
           }
         }}
       >
-        {state ? "Private Note" : "Public Note"}
+        {state ? "Private notes" : "Public notes"}
       </Input>
     );
   };
@@ -115,12 +120,27 @@ const Navbar = ({ filter, search, open, logOut }) => {
     if (signed === true) {
       return (
         <>
-          <Avatar
-            src={user?.picture}
-            sx={{ height: "27px", width: "27px", mr: 1 }}
-            onClick={handleClick}
-          ></Avatar>
-          {Private && signed === true ? privateNote(true) : privateNote(false)}
+          {!ort.small ? (
+            <>
+              <Avatar
+                src={user?.picture}
+                sx={{ height: "27px", width: "27px", mr: 1 }}
+                onClick={handleClick}
+              ></Avatar>
+              {Private && signed === true
+                ? privateNote(true)
+                : privateNote(false)}
+            </>
+          ) : (
+            <>
+              <Avatar
+                src={user?.picture}
+                sx={{ height: "32px", width: "32px", mr: 1 }}
+                onClick={handleClick}
+              ></Avatar>
+              <Typography>{uname ? uname : user.user}</Typography>
+            </>
+          )}
           <div style={{ color: "white", alignSelf: "center" }}>
             <Menu
               anchorEl={anchorEl}
@@ -130,7 +150,7 @@ const Navbar = ({ filter, search, open, logOut }) => {
             >
               <Box display="inline-flex" pb={1}>
                 <Avatar
-                  sx={{ height: "27px", width: "27px" }}
+                  sx={{ height: "40px", width: "40px" }}
                   onClick={handleClick}
                   src={user?.picture}
                 ></Avatar>
@@ -139,7 +159,7 @@ const Navbar = ({ filter, search, open, logOut }) => {
                   fontSize={"14px"}
                   sx={{ marginLeft: 1 }}
                 >
-                  {user?.user}
+                  {uname ? uname : user?.user}
                 </Typography>
               </Box>
               <Divider sx={{ background: "white" }}></Divider>
@@ -165,42 +185,106 @@ const Navbar = ({ filter, search, open, logOut }) => {
       );
     }
   };
-
+  console.log(ort);
   //return
   return (
-    <Box className={classes.box} id="Navbar">
-      <Box className={classes.boxChild2}>
-        {signed ? <Box className={classes.boxChild1}>{avatar()}</Box> : <></>}
+    <>
+      {!ort.small ? (
+        <>
+          <Box className={classes.box} id="Navbar">
+            <Box className={classes.boxChild2}>
+              {signed ? (
+                <Box className={classes.boxChild1}>{avatar()}</Box>
+              ) : (
+                <></>
+              )}
 
-        <Box>
-          {!signed ? (
-            <Input
-              type={"buttonCustom"}
-              onClickBtn={() => history.push("/login")}
-              className={{ border: `0 !important`, marginRight: 1 }}
-              id="loginButton"
+              <Box justifyContent={'center'}>
+                {!signed ? (
+                  <Input
+                    type={"buttonCustom"}
+                    onClickBtn={() => history.push("/login")}
+                    className={{ border: `0 !important`, marginRight: 1 }}
+                    id="loginButton"
+                  >
+                    Login
+                  </Input>
+                ) : null}
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                width: "82%",
+                display: "inline-flex",
+                justifyContent: "space-between",
+              }}
             >
-              Login
-            </Input>
-          ) : null}
+              <Typography alignSelf="center" fontSize={"12px"} sx={{ pl: 1 }}>
+                {Ohayo(signed ? `kak ${user?.user} ` : null)}
+              </Typography>
+              <Box id="rightSidebar">
+                {searchBar()}
+                {togle()}
+              </Box>
+            </Box>
+          </Box>
+        </>
+      ) : (
+        <Box>
+          <Box className={classes.box} id="Navbar">
+            <Box width={"30%"} display="flex" sx={{ translate: "24px" }}>
+              {signed ? (
+                <Box className={classes.boxChild1}>{avatar()}</Box>
+              ) : (
+                <></>
+              )}
+
+              <Box>
+                {!signed ? (
+                  <Input
+                    type={"buttonCustom"}
+                    onClickBtn={() => history.push("/login")}
+                    className={{ border: `0 !important`, marginRight: 1 }}
+                    id="loginButton"
+                  >
+                    Login
+                  </Input>
+                ) : null}
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                width: "40%",
+                display: "inline-flex",
+                justifyContent: "center",
+              }}
+            >
+              {/* <Typography
+                textAlign={"center"}
+                alignSelf="center"
+                fontSize={"12px"}
+                sx={{ pl: 1 }}
+              >
+                {Ohayo(signed ? `kak ${user?.user} ` : null)}
+              </Typography> */}
+            </Box>
+            <Box
+              width={"30%"}
+              sx={{ translate: "-24px" }}
+              display="flex"
+              justifyContent="end"
+            >
+              {Private && signed === true
+                ? privateNote(true)
+                : privateNote(false)}
+            </Box>
+          </Box>
+          <Box mt={3} display={"flex"} justifyContent="center" width={"100%"}>
+            {searchBar()}
+          </Box>{" "}
         </Box>
-      </Box>
-      <Box
-        sx={{
-          width: "82%",
-          display: "inline-flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography alignSelf="center" fontSize={"12px"} sx={{ pl: 1 }}>
-          {Ohayo(signed ? `kak ${user?.user} ` : null)}
-        </Typography>
-        <Box id="rightSidebar">
-          {searchBar()}
-          {togle()}
-        </Box>
-      </Box>
-    </Box>
+      )}
+    </>
   );
 };
 export default Navbar;

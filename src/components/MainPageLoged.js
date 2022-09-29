@@ -277,6 +277,7 @@ const MainPage = (prop) => {
         open={open}
         isSigned={signed}
         logOut={logOut}
+        ort={renderId}
       />
       <Box display="inline-flex" width={"100%"}>
         <Filter
@@ -286,9 +287,12 @@ const MainPage = (prop) => {
           list={list}
           handleEdit={handleEdit}
           search={search}
+        ort={renderId}
+
         />
         {openForm ? mainForm("mainForm") : null}
       </Box>
+
       {/* <Drawer
         anchor={"bottom"}
         open={state}
@@ -329,52 +333,3 @@ const MainPage = (prop) => {
   );
 };
 export default MainPage;
-{
-  /* <Box id="ohayoSmall">
-        <Typography variant={"h6"}>My Notes</Typography>
-        <Typography>{Ohayo()}</Typography>
-      </Box> */
-}
-//dummy
-const initialValue = [
-  {
-    background: "#54BAB9",
-    title: "Belajar",
-    isedit: false,
-    temp: "",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-    cat: "To do",
-    time: `${moment().subtract(3, "days").format()}`,
-    author: "initate",
-  },
-  {
-    background: "#F0A500",
-    title: "Business",
-    isedit: false,
-    temp: "",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    cat: "Assignment",
-    time: `${moment().subtract(2, "days").format()}`,
-    author: "initate",
-  },
-  {
-    background: "#FF6363",
-    title: "Kuliah",
-    isedit: false,
-    temp: "",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
-    cat: "Reminder",
-    time: `${moment().subtract(1, "days").format()}`,
-    author: "initate",
-  },
-  {
-    background: "#FF6363",
-    title: "Kuliah",
-    isedit: false,
-    temp: "",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
-    cat: "Reminder",
-    time: `${moment().subtract(1, "days").format()}`,
-    author: "initate",
-  },
-];

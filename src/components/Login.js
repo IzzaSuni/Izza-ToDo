@@ -58,7 +58,7 @@ const Login = () => {
   //check if signed
   const { signed } = IsLogin();
   if (signed) {
-    history.push("/publicNote");
+    history.replace("/publicNote");
   }
 
   //generateErr
@@ -93,7 +93,7 @@ const Login = () => {
         });
         setMsg({ type: "success", msg: "berhasil login" });
         setLoading(false);
-        history.push(`/publicNote/Private?user=${e.user.displayName}`);
+        history.push(`/publicNote/Private`);
       })
       .catch((err) => {
         if (err.code === "auth/wrong-password")
@@ -103,6 +103,8 @@ const Login = () => {
         setLoading(false);
         return err;
       });
+      console.log(e);
+
   };
 
   //handleLogin
@@ -113,14 +115,15 @@ const Login = () => {
           .then((e) => {
             console.log(e);
             const cookies = new Cookies();
+            console.log(e);
             cookies.set("akikToken", e._tokenResponse.idToken, {
               path: "/",
               maxAge: 43200,
             });
             setMsg({ type: "success", msg: "berhasil login" });
             setLoading(false);
-            CreateNote({ username: e.user.displayName }, "u&p");
-            history.push(`/publicNote/Private?user=${e.user.displayName}`);
+            // CreateNote({ username: e.user.displayName }, "u&p");
+            history.push(`/publicNote/Private`);
           })
           .catch((err) => {
             return err;
@@ -135,8 +138,8 @@ const Login = () => {
             });
             setMsg({ type: "success", msg: "berhasil login" });
             setLoading(false);
-            CreateNote({ username: e.user.displayName }, "u&p");
-            history.push(`/publicNote/Private?user=${e.user.displayName}`);
+            // CreateNote({ username: e.user.displayName }, "u&p");
+            history.push(`/publicNote/Private`);
           })
           .catch((err) => {
             return err;
@@ -153,7 +156,7 @@ const Login = () => {
             setMsg({ type: "success", msg: "berhasil login" });
             setLoading(false);
             CreateNote({ username: e.user.displayName }, "u&p");
-            history.push(`/publicNote/Private?user=${e.user.displayName}`);
+            history.push(`/publicNote/Private`);
           })
           .catch((err) => {
             return err;
@@ -186,7 +189,7 @@ const Login = () => {
   //return
   return (
     <Box className={classes.container}>
-      <Box className={`${classes.card} shadow`}>
+      <Box className={`${classes.card} shadow loginCard`}>
         <Typography textAlign="center" variant={"h4"}>
           Login
         </Typography>

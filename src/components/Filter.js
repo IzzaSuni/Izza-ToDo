@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   List,
   ListItem,
   ListItemButton,
@@ -36,8 +37,9 @@ const useStyles = makeStyles({
     },
   },
   filterText: {
-    fontSize: "18px !important",
+    fontSize: "12px !important",
     color: "white",
+    width: "auto",
   },
   filter: {
     "&.Mui-selected": {
@@ -61,6 +63,7 @@ const Filter = ({
   handleEditSubmit,
   list,
   search,
+  ort,
 }) => {
   const classes = useStyles();
   const [filter, setFilter] = useState(0);
@@ -83,45 +86,107 @@ const Filter = ({
 
   return (
     <>
-      <Box className={classes.box}>
-        <Box>
-          <List className={classes.root}>
-            {filters.map((e, i) => {
-              return (
-                <ListItemButton
-                  TouchRippleProps={{ background: "#693737" }}
-                  key={`item` + i}
-                  autoFocus={filter === i}
-                  selected={filter === i}
-                  onClick={() => setFilter(i)}
-                  className={`${classes.filter} ${classes.pad}`}
-                >
-                  <Typography className={classes.filterText}>
-                    {e.text}
-                  </Typography>
-                  {label(e.color, e.amount)}
-                </ListItemButton>
-              );
-            })}
-          </List>
+      {!ort.small ? (
+        <>
+          <Box className={classes.box}>
+            <Box>
+              <List className={classes.root}>
+                {filters.map((e, i) => {
+                  return (
+                    <ListItemButton
+                      TouchRippleProps={{ background: "#693737" }}
+                      key={`item` + i}
+                      autoFocus={filter === i}
+                      selected={filter === i}
+                      onClick={() => setFilter(i)}
+                      className={`${classes.filter} ${classes.pad}`}
+                    >
+                      <Typography className={classes.filterText}>
+                        {e.text}
+                      </Typography>
+                      {label(e.color, e.amount)}
+                    </ListItemButton>
+                  );
+                })}
+              </List>
+            </Box>
+          </Box>
+          <Box
+            className={classes.paperList}
+            height="calc(100vh - 60px)"
+            id="listForm"
+          >
+            <ListNotes
+              handleDelete={handleDelete}
+              handleCancel={handleCancel}
+              handleEdit={handleEdit}
+              handleEditSubmit={handleEditSubmit}
+              list={list}
+              filter={filters[filter].text}
+              isfilter={filter !== 0}
+              search={search}
+            />
+          </Box>
+        </>
+      ) : (
+        <Box
+          mt={2}
+          bgcolor={"#4C3A51"}
+          borderRadius="32px 32px 0 0"
+          display={"block"}
+          width="100%"
+          height={`calc(100vh - 200px)`}
+        >
+          <Box display={"flex"} justifyContent="center">
+            <Box mt={2} display="flex">
+              <List sx={{ display: "flex", width: "100vw",overflowX:'scroll' }}>
+                {filters.map((e, i) => {
+                  return (
+                    <Button
+                      key={`item` + i}
+                      onClick={() => setFilter(i)}
+                      className={`  ${filter === i ? "selected" : ""}`}
+                      sx={{
+                        background: e.color,
+                        margin: "0 8px 8px 8px",
+                        borderRadius: "12px !important",
+                        "&.selected": {
+                          border: `1px white solid !important`,
+                          borderRadius: "0 32px 32px 0",
+                        },
+                        "&:hover": {
+                          background: `${e.color} !important`,
+                        },
+                      }}
+                    >
+                      <Typography className={classes.filterText}>
+                        {e.text}
+                      </Typography>
+                    </Button>
+                  );
+                })}
+              </List>
+            </Box>
+          </Box>
+          <Box
+            width={"100%"}
+            height="calc(100vh - 290px)"
+            overflow={"scroll"}
+            id="listForm"
+          >
+            <ListNotes
+              handleDelete={handleDelete}
+              handleCancel={handleCancel}
+              handleEdit={handleEdit}
+              handleEditSubmit={handleEditSubmit}
+              list={list}
+              filter={filters[filter].text}
+              isfilter={filter !== 0}
+              search={search}
+            />
+          </Box>
         </Box>
-      </Box>
-      <Box
-        className={classes.paperList}
-        height="calc(100vh - 60px)"
-        id="listForm"
-      >
-        <ListNotes
-          handleDelete={handleDelete}
-          handleCancel={handleCancel}
-          handleEdit={handleEdit}
-          handleEditSubmit={handleEditSubmit}
-          list={list}
-          filter={filters[filter].text}
-          isfilter={filter !== 0}
-          search={search}
-        />
-      </Box>
+      )}
     </>
   );
 };

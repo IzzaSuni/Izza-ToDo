@@ -9,11 +9,13 @@ import {
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import {
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
   FacebookAuthProvider,
   getAuth,
   GithubAuthProvider,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -27,9 +29,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import Cookies from "universal-cookie";
-import { v4, V4Options } from "uuid";
-import { List } from "@mui/material";
-
+import { Auth } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyAjZX0rIvNdmRXab8sDlkjihku_Bh4y0jg",
   authDomain: "notes-9e77e.firebaseapp.com",
@@ -60,6 +60,20 @@ const uploadImages = async ({ images, name }) => {
   });
 };
 
+const updateName = async (nameNew) => {
+  await updateProfile(auth.currentUser, {
+    displayName: nameNew,
+  });
+};
+
+const changePassword = (email) => {
+  return sendPasswordResetEmail(auth, email);
+};
+
+const confirmPassword = (oob, pass) => {
+  return confirmPasswordReset(auth, oob, pass);
+};
+
 const GetNotes = ({ type = "notes", author, data }) => {
   const colRef = collection(db, type);
   let col = [];
@@ -86,7 +100,7 @@ const GetNotes = ({ type = "notes", author, data }) => {
   return getData();
 };
 let nameUser;
-const GetUser = (name) => {
+const GetUser = ({ name, type = "check", deleteid }) => {
   const colRef = collection(db, "u&p");
   let result;
   const getData = async () => {
@@ -94,10 +108,19 @@ const GetUser = (name) => {
     try {
       return getDocs(colRef).then((e) => {
         e.docs.map((ev) => {
-          return data.push(ev.data().username);
+          if (type === "check") {
+            return data.push(ev.data().username);
+          }
+          if (type === "update") {
+            if (ev.data().username === name) result = ev.id;
+          }
         });
-        if (data.includes(name)) return true;
-        else return false;
+        if (type === "update") {
+          UpdateNote({ id: result, username: deleteid }, "u&p");
+        }
+        if (type === "check")
+          if (data.includes(name)) return true;
+          else return false;
       });
     } catch (e) {
       return e;
@@ -213,4 +236,7 @@ export {
   UseDoLogOut,
   GetUser,
   uploadImages,
+  updateName,
+  changePassword,
+  confirmPassword
 };

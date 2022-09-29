@@ -160,6 +160,12 @@ input#searchBar {
   #mainForm {
     display: none;
   }
+  .resetPasswordCard,
+  .loginCard,
+  .profileCard {
+    width: 80vw !important;
+    height: 50vh !important;
+  }
   #ohayoSmall {
     text-align: center;
     position: sticky;

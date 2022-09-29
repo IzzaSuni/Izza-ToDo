@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import CreateAccount from "./components/CreateAccount";
 import MainPageLoged from "./components/MainPageLoged";
 import Profile from "./components/Profile";
+import ResetPassword from "./components/ResetPassword";
 
 function App({}) {
   return (
@@ -35,6 +36,11 @@ function App({}) {
           <Route exact path={"/publicNote/Private/profile"}>
             <Layout>
               <Profile />
+            </Layout>
+          </Route>
+          <Route exact path={"/publicNote/reset-password"}>
+            <Layout>
+              <ResetPassword />
             </Layout>
           </Route>
           <Route path="*">

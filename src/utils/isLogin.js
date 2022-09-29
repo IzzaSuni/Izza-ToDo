@@ -6,9 +6,10 @@ const IsLogin = () => {
   const cookies = new Cookies();
   const bearer = cookies.get("akikToken");
   const signed = bearer ? jwtDecode(bearer).aud === secret : false;
+  const uname = localStorage.getItem("uname");
   const user = bearer
     ? {
-        user: jwtDecode(bearer).name,
+        user: uname ? uname : jwtDecode(bearer).name,
         email: jwtDecode(bearer).email,
         isVerifiedEmail: jwtDecode(bearer).email_verified,
         userId: jwtDecode(bearer).user_id,

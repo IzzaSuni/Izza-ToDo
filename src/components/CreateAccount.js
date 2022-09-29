@@ -12,6 +12,7 @@ import Cookies from "universal-cookie";
 import bcrypt from "bcryptjs";
 import { LoadingButton } from "@mui/lab";
 import { useHistory } from "react-router-dom";
+import IsLogin from "../utils/isLogin";
 const auth = getAuth();
 const firebaseConfig = {
   apiKey: "AIzaSyAjZX0rIvNdmRXab8sDlkjihku_Bh4y0jg",
@@ -49,11 +50,9 @@ export default function CreateAccount(prop) {
   const [create, setCreate] = useState({ e: false, u: false, p: false });
   const history = useHistory();
   //check if signed
-  const signed = prop.signed;
-  if (!signed) {
-    localStorage.clear();
-  } else {
-    history.push("/publicNote");
+  const { signed } = IsLogin();
+  if (signed) {
+    history.replace("/publicNote");
   }
 
   //generateErr
@@ -112,13 +111,7 @@ export default function CreateAccount(prop) {
           path: "/",
           maxAge: 43200,
         });
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            email: email,
-            username: e.user.displayName,
-          })
-        );
+        localStorage.setItem("uname", userName);
       })
       .catch((err) => {
         if (err.code === "auth/email-already-in-use")
