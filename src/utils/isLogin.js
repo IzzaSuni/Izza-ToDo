@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 import Cookies from "universal-cookie";
 
 const IsLogin = () => {
-  const secret = process.env.REACT_APP_SECRET_TOKEN;
+  const secret = "notes-9e77e"
   const cookies = new Cookies();
   const bearer = cookies.get("akikToken");
   const signed = bearer ? jwtDecode(bearer).aud === secret : false;
