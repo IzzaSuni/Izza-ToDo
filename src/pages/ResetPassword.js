@@ -7,7 +7,7 @@ import {
   InputAdornment,
   Typography,
 } from "@mui/material";
-import Input from "./Input";
+import Input from "../components/Input";
 import { useEffect, useState } from "react";
 import {
   changePassword,
@@ -18,7 +18,7 @@ import {
   uploadImages,
 } from "../services";
 import Edit from "@mui/icons-material/Edit";
-import Snackbars from "./Alert";
+import Snackbars from "../components/Alert";
 import Cookies from "universal-cookie";
 import { getAuth, updateProfile } from "firebase/auth";
 import useQuery from "../utils/Query";

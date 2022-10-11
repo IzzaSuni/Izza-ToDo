@@ -1,0 +1,62 @@
+@media (max-width: 900px) {
+  #mainForm {
+    display: none;
+  }
+  .resetPasswordCard,
+  .loginCard,
+  .profileCard {
+    width: 80vw !important;
+  }
+  #ohayoSmall {
+    text-align: center;
+    position: sticky;
+    width: 100vw;
+  }
+  #ohayoBig {
+    display: none;
+  }
+
+  #listForm {
+    width: 100%;
+    height: calc(100vh - 197px);
+    overflow-y: scroll;
+  }
+  #buttonAddNotes {
+    position: sticky;
+    bottom: 0;
+    width: 100vw;
+    height: 52px !important;
+    text-align: center;
+    border-radius: 16px 16px 0 0;
+  }
+  .create-account-card {
+    min-width: 75vw;
+  }
+}
+@media (min-width: 900px) {
+  #buttonAddNotes {
+    display: none;
+  }
+  #mainContainer {
+    display: block;
+  }
+  #ohayoSmall {
+    display: none;
+  }
+}
+body:-ms-keyboard-active {
+  background-color: black;
+}
+@media (min-height: 520px) {
+.master{
+height: 100vh;
+}
+}
+@media (max-height: 520px) {
+.master{
+height: auto;
+}
+}
+body:-ms-keyboard-active {
+  background-color: black;
+}

@@ -8,7 +8,7 @@ import { makeStyles } from "@mui/styles";
 import "../index.css";
 import Masonry from "react-masonry-css";
 import moment from "moment";
-import Input from "./Input";
+import Input from "../components/Input";
 import "moment/locale/id";
 import IsLogin from "../utils/isLogin";
 import { useLocation } from "react-router-dom";
@@ -87,27 +87,7 @@ export default function ListNotes({
     default: 4,
     1400: 3,
     1100: 2,
-    500: 1,
-  };
-
-  //generate color card
-  const generateColor = (cat) => {
-    switch (cat) {
-      case "To do":
-        return "#54BAB9";
-      case "Work":
-        return "#533535";
-      case "Reminder":
-        return "#FF6363";
-      case "Money":
-        return "#8479E1";
-      case "Assignment":
-        return "#F0A500";
-      case "Study":
-        return "#2B2B2B";
-      default:
-        break;
-    }
+    500: 2,
   };
 
   //return
@@ -138,13 +118,7 @@ export default function ListNotes({
           }
           return (
             <Box key={`${value.title} + ${Math.random()}`}>
-              <Box
-                bgcolor={() => generateColor(value.cat)}
-                mx={0.5}
-                p={1}
-                borderRadius="8px"
-                className="shadow"
-              >
+              <Box bgcolor={"#252933"} mx={0.5} p={1} borderRadius="8px">
                 <Box
                   display={"inline-flex"}
                   width="100%"
@@ -180,7 +154,10 @@ export default function ListNotes({
                   </Box>
                   <Box display="block" textAlign={"end"}>
                     {user?.user !== value?.author ? (
-                      <></>
+                      <Avatar
+                        src={value?.picture}
+                        sx={{ height: "40px", width: "40px", mr: 1 }}
+                      ></Avatar>
                     ) : (
                       <Box>
                         <ButtonBase
@@ -210,10 +187,13 @@ export default function ListNotes({
                       </Box>
                     )}
                     <Box
-                      display={"flex"}
                       width="100%"
                       justifyContent={"center"}
-                      sx={{ opacity: value.isedit ? 1 : 0 }}
+                      sx={{
+                        opacity: value.isedit ? 1 : 0,
+                        display: user?.user !== value?.author ? "none" : "flex",
+                      }}
+                      className="card-avatar-under"
                     >
                       <InfoOutlinedIcon className={classes.tiny} />
                       <Typography
@@ -240,6 +220,7 @@ export default function ListNotes({
                     }}
                     lineHeight={"18px"}
                     fontWeight="550"
+                    fontSize={"12px"}
                   >
                     {value.desc}
                   </Typography>
@@ -254,9 +235,9 @@ export default function ListNotes({
                   sx={{ width: "100%", pt: 2 }}
                   textAlign="end"
                   className={classes.tiny}
+                  fontSize={"8px"}
                 >
                   {value.timeText}
-
                   {location ? "" : value.author ? ` - ${value.author}` : ""}
                 </Typography>
               </Box>

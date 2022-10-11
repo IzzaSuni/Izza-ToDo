@@ -1,12 +1,13 @@
 import "./App.css";
-import Layout from "./components/Layout";
-import MainPage from "./components/MainPage";
+import "./responsive.css";
+import Layout from "./utils/Layout";
+import MainPage from "./pages/MainPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Login from "./components/Login";
-import CreateAccount from "./components/CreateAccount";
-import MainPageLoged from "./components/MainPageLoged";
-import Profile from "./components/Profile";
-import ResetPassword from "./components/ResetPassword";
+import Login from "./pages/Login";
+import CreateAccount from "./pages/CreateAccount";
+import MainPageLoged from "./pages/MainPageLoged";
+import Profile from "./pages/Profile";
+import ResetPassword from "./pages/ResetPassword";
 
 function App({}) {
   return (
@@ -41,6 +42,11 @@ function App({}) {
           <Route exact path={"/publicNote/reset-password"}>
             <Layout>
               <ResetPassword />
+            </Layout>
+          </Route>
+          <Route exact path={"/"}>
+            <Layout>
+              <MainPage />
             </Layout>
           </Route>
           <Route path="*">

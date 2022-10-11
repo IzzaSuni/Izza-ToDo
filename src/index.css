@@ -8,7 +8,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-smooth: antialiased;
   box-sizing: border-box;
-  background-color: #2c3639;
+  background-color: #181c25;
 }
 button[type="button"] {
   font-size: 10px;
@@ -41,8 +41,9 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #e7f6f2 inset !important;
-  box-shadow: 0 0 0 30px #e7f6f2 inset !important;
+  -webkit-box-shadow: 0 0 0 30px#6a6a6a inset !important;
+  box-shadow: 0 0 0 30px #6a6a6a inset !important;
+  color: white;
 }
 input:disabled {
   -webkit-text-fill-color: black !important;
@@ -97,10 +98,9 @@ input#searchBar {
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  border: 1px solid rgba(255, 255, 255, 0.645);
   background-clip: padding-box;
   border-radius: 10px;
-  background-color: #303030;
+  background-color: #5d5b5b;
 }
 @keyframes moving {
   0% {
@@ -122,9 +122,6 @@ input#searchBar {
 
 .shadows {
   animation: moving infinite 350ms;
-}
-.shadow {
-  box-shadow: 0px 0px 2px 1px rgba(255, 255, 255, 0.356);
 }
 
 .MuiPopover-paper {
@@ -151,52 +148,9 @@ input#searchBar {
   font-weight: 900;
 }
 
-/* responsive=============================================================================== */
 #mainContainer {
   display: block;
   height: 100vh;
-}
-@media (max-width: 900px) {
-  #mainForm {
-    display: none;
-  }
-  .resetPasswordCard,
-  .loginCard,
-  .profileCard {
-    width: 80vw !important;
-    height: 50vh !important;
-  }
-  #ohayoSmall {
-    text-align: center;
-    position: sticky;
-    width: 100vw;
-  }
-  #ohayoBig {
-    display: none;
-  }
-
-  #listForm {
-    width: 100%;
-  }
-  #buttonAddNotes {
-    position: sticky;
-    bottom: 0;
-    width: 100vw;
-    height: 52px !important;
-    text-align: center;
-    border-radius: 16px 16px 0 0;
-  }
-}
-@media (min-width: 900px) {
-  #buttonAddNotes {
-    display: none;
-  }
-  #mainContainer {
-    display: block;
-  }
-  #ohayoSmall {
-    display: none;
-  }
 }
 
 #loginButton:hover {

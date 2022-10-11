@@ -7,19 +7,21 @@ import {
   InputAdornment,
   Typography,
 } from "@mui/material";
-import Input from "./Input";
+import Input from "../components/Input";
 import { useEffect, useState } from "react";
 import {
   changePassword,
   DeleteNote,
+  GetNotes,
   GetUser,
   updateName,
   uploadImages,
 } from "../services";
 import Edit from "@mui/icons-material/Edit";
-import Snackbars from "./Alert";
+import Snackbars from "../components/Alert";
 import Cookies from "universal-cookie";
 import { getAuth, updateProfile } from "firebase/auth";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles({
   card: {
     height: "60vh",
@@ -49,6 +51,10 @@ export default function Profile() {
   const [open, setOpen] = useState(false);
   const [isdisabled, setDisable] = useState({ file: false, uName: false });
   const uname = localStorage.getItem("uname");
+  const hisory = useHistory();
+  if (!signed) {
+    hisory.replace("/publicNote");
+  }
 
   //handleClose snackbar
   const handleCloseSnackbar = (event, reason) => {

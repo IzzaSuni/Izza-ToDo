@@ -9,7 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
+import getOffset from "../utils/getPost";
 import ListNotes from "./List";
 
 const useStyles = makeStyles({
@@ -26,7 +27,6 @@ const useStyles = makeStyles({
     textAlign: "center",
     display: "flex",
     flexDirection: "column",
-    // boxShadow: "5px 0px 5px #693737",
   },
   pad: {
     "&.MuiButtonBase-root": {
@@ -56,6 +56,8 @@ const useStyles = makeStyles({
     },
   },
 });
+let mfilter = 0;
+
 const Filter = ({
   handleDelete,
   handleEdit,
@@ -64,9 +66,16 @@ const Filter = ({
   list,
   search,
   ort,
+  type,
+  filtered,
+  mFilter,
 }) => {
   const classes = useStyles();
   const [filter, setFilter] = useState(0);
+  useEffect(() => {
+    if (typeof mFilter === "undefined") return;
+    setFilter(mFilter);
+  }, [mFilter]);
 
   //colored amount label
   const label = (color, amount) => {
@@ -83,7 +92,40 @@ const Filter = ({
       </Box>
     );
   };
+  const container = document.getElementById("itemContainer");
 
+  const clickScroll = (el, id) => {
+    el?.addEventListener("click", (e) => {
+      container?.scrollTo({
+        left: getOffset(el, container),
+        behavior: "smooth",
+      });
+    });
+    let time;
+    container?.addEventListener("scroll", () => {
+      if (
+        container?.scrollLeft >= getOffset(el) - 30 &&
+        container?.scrollLeft < 30 + getOffset(el)
+      ) {
+        setFilter(id);
+        if (container.scrollLeft !== getOffset(el)) {
+          time = setTimeout(() => {
+            container?.scrollTo({
+              left: getOffset(el, container),
+              behavior: "smooth",
+            });
+          }, 4000);
+          console.log(time);
+        }
+      }
+      if (time) clearTimeout(time);
+    });
+  };
+  ["item-0", "item-1", "item-2", "item-3"].map((e, i) => {
+    clickScroll(document.getElementById(e), i);
+  });
+
+  //return
   return (
     <>
       {!ort.small ? (
@@ -128,64 +170,56 @@ const Filter = ({
             />
           </Box>
         </>
-      ) : (
-        <Box
-          mt={2}
-          bgcolor={"#4C3A51"}
-          borderRadius="32px 32px 0 0"
-          display={"block"}
-          width="100%"
-          height={`calc(100vh - 200px)`}
-        >
-          <Box display={"flex"} justifyContent="center">
-            <Box mt={2} display="flex">
-              <List sx={{ display: "flex", width: "100vw",overflowX:'scroll' }}>
-                {filters.map((e, i) => {
-                  return (
-                    <Button
-                      key={`item` + i}
-                      onClick={() => setFilter(i)}
-                      className={`  ${filter === i ? "selected" : ""}`}
-                      sx={{
-                        background: e.color,
-                        margin: "0 8px 8px 8px",
-                        borderRadius: "12px !important",
-                        "&.selected": {
-                          border: `1px white solid !important`,
-                          borderRadius: "0 32px 32px 0",
-                        },
-                        "&:hover": {
-                          background: `${e.color} !important`,
-                        },
-                      }}
-                    >
-                      <Typography className={classes.filterText}>
-                        {e.text}
-                      </Typography>
-                    </Button>
-                  );
-                })}
-              </List>
-            </Box>
-          </Box>
-          <Box
-            width={"100%"}
-            height="calc(100vh - 290px)"
-            overflow={"scroll"}
-            id="listForm"
-          >
-            <ListNotes
-              handleDelete={handleDelete}
-              handleCancel={handleCancel}
-              handleEdit={handleEdit}
-              handleEditSubmit={handleEditSubmit}
-              list={list}
-              filter={filters[filter].text}
-              isfilter={filter !== 0}
-              search={search}
-            />
-          </Box>
+      ) : type === "list" ? (
+        <Box width={"100%"} mt={2} minWidth="100vw" id="listForm">
+          <ListNotes
+            handleCancel={handleCancel}
+            handleEdit={handleEdit}
+            handleEditSubmit={handleEditSubmit}
+            list={list}
+            filter={filters[filter].text}
+            isfilter={filter !== 0}
+            search={search}
+          />
         </Box>
+      ) : (
+        <List
+          sx={{
+            display: "flex",
+            background: "#252933",
+            borderRadius: "12px",
+            placeContent: "flex-start",
+            width: "64px",
+            overflow: "auto",
+            padding: "2px 0",
+          }}
+          id="itemContainer"
+        >
+          {filters.map((e, i) => {
+            return (
+              <Button
+                key={`item` + i}
+                id={`item-${i}`}
+                onClick={() => filtered(i)}
+                className={`${filter === i ? "selected" : ""}`}
+                sx={{
+                  borderRadius: "12px !important",
+                  margin: "0 8px 0 0",
+                  "&.selected": {
+                    border: `1px white solid !important`,
+                    background: "#181c25",
+                  },
+                  "&:hover": {
+                    background: `${e.color} !important`,
+                  },
+                  padding: 0,
+                }}
+              >
+                <Typography className={classes.filterText}>{e.text}</Typography>
+              </Button>
+            );
+          })}
+        </List>
       )}
     </>
   );
@@ -196,37 +230,19 @@ export default Filter;
 const filters = [
   {
     text: "All",
-    color: "#693737",
     amount: 14,
   },
   {
     text: "To do",
-    color: "#54BAB9",
     amount: 14,
   },
-  {
-    text: "Work",
-    color: "#533535",
-    amount: 14,
-  },
+
   {
     text: "Reminder",
-    color: "#FF6363",
     amount: 14,
   },
   {
     text: "Money",
-    color: "#8479E1",
-    amount: 14,
-  },
-  {
-    text: "Assignment",
-    color: "#F0A500",
-    amount: 14,
-  },
-  {
-    text: "Study",
-    color: "#2B2B2B",
     amount: 14,
   },
 ];

@@ -10,12 +10,13 @@ import {
 import { makeStyles } from "@mui/styles";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Ohayo from "./ohayo";
-import Input from "./Input";
+import Input from "../components/Input";
 import AddIcon from "@mui/icons-material/Add";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useState } from "react";
 import IsLogin from "../utils/isLogin";
 import useQuery from "../utils/Query";
+import Filter from "./Filter";
 
 const useStyles = makeStyles({
   box: {
@@ -26,11 +27,12 @@ const useStyles = makeStyles({
   boxChild1: {
     display: "inline-flex",
     alignItems: "center",
+    justifyContent: "center",
   },
   boxChild2: {
     width: "calc(18%)",
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   Menu: {
     "& .MuiPopover-paper": {
@@ -46,28 +48,44 @@ const useStyles = makeStyles({
   },
 });
 
-const Navbar = ({ filter, search, open, logOut, ort }) => {
+const Navbar = ({ filter, search, open, logOut, ort, filterValue }) => {
   const classes = useStyles();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const { signed, user } = IsLogin();
-  const param = useQuery().get("user");
-  const loct = useLocation().pathname;
   const Private = useLocation().pathname === "/publicNote/Private";
   const uname = localStorage.getItem("uname");
+  const [Filters, setFilters] = useState(0);
+
+  const deFilter = (e) => {
+    setFilters(e);
+    filter(e);
+  };
+
   //renderSearchbar
   const searchBar = () => {
     return (
       <InputBase
         sx={{
-          border: "1px white solid",
-          borderRadius: "16px",
-          py: 1,
+          borderRadius: "12px",
           mr: ort.small ? 0 : 1,
           width: ort.small ? "90%" : "auto",
+          fontSize: "10px",
+          fontFamily: "poppins",
+          background: "#252933",
+          padding: "4px",
         }}
-        endAdornment={
+        startAdornment={
           <SearchOutlinedIcon sx={{ fill: "white", fontSize: "24px" }} />
+        }
+        endAdornment={
+          ort.small === true ? (
+            <div style={{ display: "flex" }}>
+              <Filter ort={ort} filtered={deFilter} mFilter={Filters} />
+            </div>
+          ) : (
+            <></>
+          )
         }
         onChange={(e) => search(e)}
         id="searchBar"
@@ -90,7 +108,6 @@ const Navbar = ({ filter, search, open, logOut, ort }) => {
     return (
       <Input
         type={"buttonCustom"}
-        className={{ marginRight: "8px" }}
         onClickBtn={() => {
           if (state === false) {
             user.user
@@ -138,7 +155,6 @@ const Navbar = ({ filter, search, open, logOut, ort }) => {
                 sx={{ height: "32px", width: "32px", mr: 1 }}
                 onClick={handleClick}
               ></Avatar>
-              <Typography>{uname ? uname : user.user}</Typography>
             </>
           )}
           <div style={{ color: "white", alignSelf: "center" }}>
@@ -185,7 +201,6 @@ const Navbar = ({ filter, search, open, logOut, ort }) => {
       );
     }
   };
-  console.log(ort);
   //return
   return (
     <>
@@ -199,7 +214,7 @@ const Navbar = ({ filter, search, open, logOut, ort }) => {
                 <></>
               )}
 
-              <Box justifyContent={'center'}>
+              <Box justifyContent={"center"}>
                 {!signed ? (
                   <Input
                     type={"buttonCustom"}
@@ -214,9 +229,10 @@ const Navbar = ({ filter, search, open, logOut, ort }) => {
             </Box>
             <Box
               sx={{
-                width: "82%",
+                width: "calc(82% - 16px)",
                 display: "inline-flex",
                 justifyContent: "space-between",
+                marginRight: "8px",
               }}
             >
               <Typography alignSelf="center" fontSize={"12px"} sx={{ pl: 1 }}>
@@ -258,16 +274,7 @@ const Navbar = ({ filter, search, open, logOut, ort }) => {
                 display: "inline-flex",
                 justifyContent: "center",
               }}
-            >
-              {/* <Typography
-                textAlign={"center"}
-                alignSelf="center"
-                fontSize={"12px"}
-                sx={{ pl: 1 }}
-              >
-                {Ohayo(signed ? `kak ${user?.user} ` : null)}
-              </Typography> */}
-            </Box>
+            ></Box>
             <Box
               width={"30%"}
               sx={{ translate: "-24px" }}
@@ -279,7 +286,7 @@ const Navbar = ({ filter, search, open, logOut, ort }) => {
                 : privateNote(false)}
             </Box>
           </Box>
-          <Box mt={3} display={"flex"} justifyContent="center" width={"100%"}>
+          <Box mt={1} display={"flex"} justifyContent="center" width={"100%"}>
             {searchBar()}
           </Box>{" "}
         </Box>

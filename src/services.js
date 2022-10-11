@@ -48,6 +48,7 @@ const providerFacebook = new FacebookAuthProvider();
 const Github = new GithubAuthProvider();
 const storage = getStorage();
 const refs = ref(storage);
+const bcrypt = require("bcryptjs");
 
 const uploadImages = async ({ images, name }) => {
   const imagesRef = ref(storage, `images/${name} profile pict `);
@@ -106,21 +107,21 @@ const GetUser = ({ name, type = "check", deleteid }) => {
   const getData = async () => {
     let data = [];
     try {
-      return getDocs(colRef).then((e) => {
+      return await getDocs(colRef).then((e) => {
         e.docs.map((ev) => {
           if (type === "check") {
-            return data.push(ev.data().username);
+            bcrypt.compareSync(name, ev.data().username) === true
+              ? (result = true)
+              : (result = false);
           }
           if (type === "update") {
-            if (ev.data().username === name) result = ev.id;
+            if (ev.data().uid === name) result = ev.id;
           }
         });
         if (type === "update") {
           UpdateNote({ id: result, username: deleteid }, "u&p");
         }
-        if (type === "check")
-          if (data.includes(name)) return true;
-          else return false;
+        return result;
       });
     } catch (e) {
       return e;
@@ -238,5 +239,5 @@ export {
   uploadImages,
   updateName,
   changePassword,
-  confirmPassword
+  confirmPassword,
 };

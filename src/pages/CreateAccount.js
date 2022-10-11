@@ -1,8 +1,8 @@
 import { Box, InputAdornment, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useState } from "react";
-import { CreateNote, GetNotes, GetUser, UseDoCreateUser } from "../services";
-import Input from "./Input";
+import { CreateNote, GetUser } from "../services";
+import Input from "../components/Input";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -13,6 +13,7 @@ import bcrypt from "bcryptjs";
 import { LoadingButton } from "@mui/lab";
 import { useHistory } from "react-router-dom";
 import IsLogin from "../utils/isLogin";
+import generateErrEmail from "../utils/GenerateError";
 const auth = getAuth();
 const firebaseConfig = {
   apiKey: "AIzaSyAjZX0rIvNdmRXab8sDlkjihku_Bh4y0jg",
@@ -26,14 +27,14 @@ const firebaseConfig = {
 
 const useStyles = makeStyles({
   card: {
-    height: "60vh",
     width: "40vw",
     background: "#2B2B2B",
     borderRadius: "8px",
     padding: "32px",
+    height:'fit-content',
+    margin:'16px 0'
   },
   container: {
-    height: "100vh",
     width: "100vw",
     display: "flex",
     justifyContent: "center",
@@ -45,63 +46,36 @@ export default function CreateAccount(prop) {
   const classes = useStyles();
   const [msges, setMsg] = useState({ type: "", msg: "" });
   const [loading, setLoading] = useState(false);
-  const [checkUn, setCheckUn] = useState(false);
-  const [msgCheck, setMsgCheck] = useState();
   const [create, setCreate] = useState({ e: false, u: false, p: false });
   const history = useHistory();
+
   //check if signed
   const { signed } = IsLogin();
   if (signed) {
     history.replace("/publicNote");
   }
 
-  //generateErr
-  const generateErrEmail = (content, type) => {
-    if (type === "email") {
-      if (content.length === 0) return " ";
-      else if (
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(content) === false
-      )
-        return "format e-mail salah ❌";
-      else if (content.length > 0 && content.indexOf("@") === -1)
-        return "format e-mail salah ❌";
-      else return "format e-mail sesuai ✔️";
-    } else {
-      let format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-      if (content.length === 0) return "";
-      if (content.length > 0 && content.length < 6)
-        return "minimal password 6 karakter ❌";
-      else if (/[A-Z]/.test(content) === false)
-        return "Password wajib terdapat huruf kapital ❌";
-      else if (/\d/.test(content) === false)
-        return "Password wajib terdapat angka ❌";
-      else if (format.test(content) === false)
-        return "Password wajib terdapat karakter spesial (!@#$%^&*) ❌";
-      else return "Password ✔️";
-    }
-  };
-
   //handleSubmit
   const submit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     if (create.e === false || create.p == false || create.u === false) {
-      console.log("invalid");
       setLoading(false);
       return;
     }
+    //getting data
     const userName = e.target[0].value;
     const email = e.target[2].value;
     const passwordOld = e.target[4].value;
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(passwordOld, salt);
+
+    //do create user
     await createUserWithEmailAndPassword(auth, email, passwordOld)
       .then((e) => {
         updateProfile(auth.currentUser, {
           displayName: userName,
-        })
-          .then((ev) => ev)
-          .catch((err) => err);
+        });
         CreateNote({ username: userName, email: email, password: hash }, "u&p");
         setMsg({ type: "success", msg: "User berhasil dibuat" });
         setCreate({ e: false, u: false, p: false });
@@ -156,34 +130,32 @@ export default function CreateAccount(prop) {
 
   //handleChangeU
   const handleChangeU = async (es) => {
-    setCheckUn(true);
+    setCreate({ ...create, u: false });
     const uName = es.target.value;
-    GetUser(uName).then((e) => {
+    GetUser({ name: uName }).then((e) => {
       const helperU = document.getElementById("helperUser");
       let msg =
         e === true ? "Username sudah dipakai ❌" : "Username tersedia ✔️";
-      console.log(e);
       if (uName === "") msg = "";
-      if (msg === "Username tersedia ✔️") {
+      if (e === true) {
+        setCreate({ ...create, u: false });
+        helperU.style.color = "#D1512D";
+      } else if (e !== true) {
         setCreate({ ...create, u: true });
         helperU.style.color = "#7DCE13";
-      } else {
-        setCreate({ ...create, e: false });
-        helperU.style.color = "#D1512D ";
       }
       helperU.innerHTML = msg;
-      setCheckUn(false);
     });
   };
 
   //return
   return (
     <Box className={classes.container}>
-      <Box className={`${classes.card} shadow`}>
+      <Box className={`${classes.card} create-account-card`}>
         <Typography textAlign="center" variant={"h4"}>
           Create an account
         </Typography>
-        <Box marginY={6}>
+        <Box marginY={6} bgcolor="#2B2B2B">
           <form onSubmit={submit}>
             <Box>
               <Input
@@ -193,7 +165,7 @@ export default function CreateAccount(prop) {
                 hdlChangeCapture={handleChangeU}
                 maxchar={15}
                 icon={
-                  checkUn === true
+                  loading === true
                     ? {
                         endAdornment: (
                           <InputAdornment position="end">
@@ -239,7 +211,7 @@ export default function CreateAccount(prop) {
                 loading={loading}
                 className={{ width: "30%" }}
                 isdisabled={
-                  create.e !== true || create.e !== true || create.p !== true
+                  create.e === false || create.u === false || create.p === false
                 }
               >
                 Sign Up
@@ -262,24 +234,3 @@ export default function CreateAccount(prop) {
     </Box>
   );
 }
-
-//generate password strength
-//   const generatePassStrength = (pass) => {
-//     let value = 0;
-//     let format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-//     if (pass.length === 0) value = 0;
-//     if (pass.length > 0 && pass.length < 6) value = 0;
-//     if (pass.length > 6) value += 1;
-//     if (pass.length > 8) value += 1;
-//     if (pass.length > 10) value += 1;
-//     if (/[A-Z]/.test(pass) === true) value += 1;
-//     if (/\d/.test(pass) === true) value += 1;
-//     if (format.test(pass) === true) value += 1;
-//     if (value === 0) return "";
-//     else if (value === 1) return "weak";
-//     else if (value === 2) return "good";
-//     else if (value === 3) return "good";
-//     else if (value === 4) return "good";
-//     else if (value === 5) return "excelent";
-//     else if (value === 6) return "excelent";
-//   };

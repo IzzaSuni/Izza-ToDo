@@ -6,9 +6,9 @@ import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import Input from "./Input";
-import Filter from "./Filter";
-import Navbar from "./navbar";
+import Input from "../components/Input";
+import Filter from "../modules/Filter";
+import Navbar from "../modules/navbar";
 import Cookies from "universal-cookie";
 import IsLogin from "../utils/isLogin";
 import {
@@ -18,6 +18,7 @@ import {
   withRouter,
 } from "react-router-dom";
 import useQuery from "../utils/Query";
+import ListNotes from "../modules/List";
 
 const useStyles = makeStyles({
   container: {
@@ -26,6 +27,12 @@ const useStyles = makeStyles({
     width: "100vw",
     background: "rgb(0 0 0 / 70%)",
     top: 0,
+  },
+  paperList: {
+    width: "82%",
+    flexWrap: "wrap",
+    background: "#2C3639!important",
+    overflow: "auto",
   },
   containerPopUp: {
     width: `calc(50%)`,
@@ -75,7 +82,6 @@ const MainPage = (prop) => {
           author: user?.user,
         })
         .then((e) => {
-          console.log(e);
           e.forEach((ev) => {
             ev.isedit = false;
             ev.temp = "";
@@ -111,6 +117,7 @@ const MainPage = (prop) => {
   //handleLogout
   const logOut = () => {
     cookies.remove("akikToken");
+    localStorage.clear();
     return history.push("/login");
   };
 
@@ -120,7 +127,7 @@ const MainPage = (prop) => {
     const title = e.target[0].value;
     const desc = e.target[2].value;
     const cat = e.target[5].value;
-
+    const picture = user.picture;
     if (title.length === 0) return;
     const data = {
       title: title,
@@ -130,6 +137,7 @@ const MainPage = (prop) => {
       cat: cat,
       time: `${moment().format()}`,
       author: user.user ? user.user : "anonymous",
+      picture: picture,
     };
     setList([...list, data]);
     service.CreateNote(data, !location ? "notes" : "publicNote");
@@ -233,26 +241,6 @@ const MainPage = (prop) => {
   }, [renderId]);
 
   //render shadow footer and header
-  const page = document.getElementById("listForm");
-  page?.addEventListener("scroll", (e) => {
-    const elm = document.getElementById("ohayoSmall");
-    const elms = document.getElementById("buttonAddNotes");
-    const b = page.scrollHeight - page.clientHeight;
-    if (page.scrollTop >= 8) {
-      elm.style = "box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.507)";
-      elm.style.transition = "all 0.3s ease-in-out";
-    } else {
-      elm.style = "box-shadow:0";
-      elm.style.transition = "all 0.3s ease-in-out";
-    }
-    if (page.scrollTop <= b - 16) {
-      elms.style = "box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.507)";
-      elms.style.transition = "all 0.3s ease-in-out";
-    } else if (page.scrollTop >= b - 16) {
-      elms.style = "box-shadow:0";
-      elms.style.transition = "all 0.3s ease-in-out";
-    }
-  });
 
   //handleSearch
   const handleSearch = (e, type) => {
@@ -269,6 +257,11 @@ const MainPage = (prop) => {
     setOpenForm(true);
   };
 
+  //filter
+  const [Filters, setFilter] = useState(0);
+  const filtered = (e) => {
+    setFilter(e);
+  };
   //return
   return (
     <Box id="mainContainer" display={"block"} width={"100%"}>
@@ -278,6 +271,7 @@ const MainPage = (prop) => {
         isSigned={signed}
         logOut={logOut}
         ort={renderId}
+        filter={filtered}
       />
       <Box display="inline-flex" width={"100%"}>
         <Filter
@@ -287,8 +281,9 @@ const MainPage = (prop) => {
           list={list}
           handleEdit={handleEdit}
           search={search}
-        ort={renderId}
-
+          ort={renderId}
+          type="list"
+          mFilter={Filters}
         />
         {openForm ? mainForm("mainForm") : null}
       </Box>

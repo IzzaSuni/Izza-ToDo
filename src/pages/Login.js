@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useState } from "react";
-import { CreateNote, UseDoLogIn } from "../services";
-import Input from "./Input";
+import { CreateNote, GetNotes, UpdateNote, UseDoLogIn } from "../services";
+import Input from "../components/Input";
 import {
   FacebookAuthProvider,
   getAuth,
@@ -14,8 +14,10 @@ import {
 import { getFirestore } from "firebase/firestore";
 import Cookies from "universal-cookie";
 import { useHistory, withRouter } from "react-router-dom";
-import Img from "./Img";
+import Img from "../components/Img";
 import IsLogin from "../utils/isLogin";
+import CheckUsername from "../utils/checkUname";
+import generateErrEmail from "../utils/GenerateError";
 
 const providerGoogle = new GoogleAuthProvider();
 const providerFacebook = new FacebookAuthProvider();
@@ -32,14 +34,13 @@ const firebaseConfig = {
 
 const useStyles = makeStyles({
   card: {
-    height: "60vh",
     width: "40vw",
     background: "#2B2B2B",
     borderRadius: "8px",
     padding: "32px",
+    margin: "16px 0",
   },
   container: {
-    height: "100vh",
     width: "100vw",
     display: "flex",
     justifyContent: "center",
@@ -52,7 +53,6 @@ const Login = () => {
   const classes = useStyles();
   const [msg, setMsg] = useState({ type: "", msg: "" });
   const [loading, setLoading] = useState(false);
-  const db = getFirestore();
   const auth = getAuth();
 
   //check if signed
@@ -60,23 +60,6 @@ const Login = () => {
   if (signed) {
     history.replace("/publicNote");
   }
-
-  //generateErr
-  const generateErrEmail = (content, type) => {
-    if (type === "email") {
-      if (content.length === 0) return " ";
-      else if (content[content.indexOf("@") + 1] === undefined)
-        return "format e-mail salah";
-      else if (content.length > 0 && content.indexOf("@") === -1)
-        return "format e-mail salah";
-      else return " ";
-    } else {
-      if (content.length === 0) return "";
-      if (content.length > 0 && content.length < 6)
-        return "minimal password 8 karakter";
-      else return " ";
-    }
-  };
 
   //handleSubmit
   const submit = (e) => {
@@ -103,8 +86,6 @@ const Login = () => {
         setLoading(false);
         return err;
       });
-      console.log(e);
-
   };
 
   //handleLogin
@@ -115,14 +96,13 @@ const Login = () => {
           .then((e) => {
             console.log(e);
             const cookies = new Cookies();
-            console.log(e);
             cookies.set("akikToken", e._tokenResponse.idToken, {
               path: "/",
               maxAge: 43200,
             });
             setMsg({ type: "success", msg: "berhasil login" });
             setLoading(false);
-            // CreateNote({ username: e.user.displayName }, "u&p");
+            CheckUsername({ id: e.user.uid, username: e.user.displayName });
             history.push(`/publicNote/Private`);
           })
           .catch((err) => {
@@ -138,7 +118,7 @@ const Login = () => {
             });
             setMsg({ type: "success", msg: "berhasil login" });
             setLoading(false);
-            // CreateNote({ username: e.user.displayName }, "u&p");
+            CheckUsername({ id: e.user.uid, username: e.user.displayName });
             history.push(`/publicNote/Private`);
           })
           .catch((err) => {
@@ -155,7 +135,7 @@ const Login = () => {
             });
             setMsg({ type: "success", msg: "berhasil login" });
             setLoading(false);
-            CreateNote({ username: e.user.displayName }, "u&p");
+            CheckUsername({ id: e.user.uid, username: e.user.displayName });
             history.push(`/publicNote/Private`);
           })
           .catch((err) => {
